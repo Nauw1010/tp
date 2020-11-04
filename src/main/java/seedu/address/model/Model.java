@@ -76,14 +76,26 @@ public interface Model {
     void setJournal(ReadOnlyJournal journal);
 
     /**
+     * Updates entries involving the contact given.
+     */
+    void updateJournalContacts(Person originalPerson, Person updatedPerson);
+
+    /**
      * Returns the Journal
      */
     ReadOnlyJournal getJournal();
 
     /**
-     * Returns true if a person with the same identity as {@code person} exists in the address book.
+     * Returns true if a person with the same identity as {@code person} exists
+     * in the address book.
      */
     boolean hasPerson(Person person);
+
+    /**
+     * Returns true if a person with the same name as {@code person} exists
+     * in the address book.
+     */
+    boolean hasName(Person person);
 
     /**
      * Deletes the given person.
@@ -100,12 +112,14 @@ public interface Model {
     /**
      * Replaces the given person {@code target} with {@code editedPerson}.
      * {@code target} must exist in the address book.
-     * The person identity of {@code editedPerson} must not be the same as another existing person in the address book.
+     * The person identity of {@code editedPerson} must not be the same as
+     * another existing person in the address book.
      */
     void setPerson(Person target, Person editedPerson);
 
     /**
-     * Returns true if a journal entry with the same identity as {@code entry} exists in the journal.
+     * Returns true if a journal entry with the same identity as {@code entry}
+     * exists in the journal.
      */
     boolean hasEntry(Entry entry);
 
@@ -153,7 +167,8 @@ public interface Model {
     ObservableList<Person> getFrequentPersonList();
 
     /**
-     * Updates the filter of the filtered person list to filter by the given {@code predicate}.
+     * Updates the filter of the filtered person list to filter by the given
+     * {@code predicate}.
      *
      * @throws NullPointerException if {@code predicate} is null.
      */

@@ -19,6 +19,7 @@ import seedu.address.MainApp;
 import seedu.address.model.journal.Entry;
 import seedu.address.model.person.Person;
 
+//@@author {Nauw1010}
 /**
  * An UI component that displays information of a {@code Entry} in detail.
  */
@@ -54,7 +55,7 @@ public class EntryContent extends UiPart<Region> {
     public EntryContent() {
         super(FXML);
         this.entry = null;
-        this.calendar.setImage(getImage("/images/calendar_1.png"));
+        // this.calendar.setImage(getImage("/images/calendar_1.png"));
         emptyRelatedListText.getStyleClass().add("text-empty-list");
         relatedPersonListView.setCellFactory(listView -> new PersonListViewCell());
         setDefaultContent();
@@ -65,14 +66,16 @@ public class EntryContent extends UiPart<Region> {
     }
 
     private void setDefaultContent() {
+        this.calendar.setImage(null);
         title.setText("");
-        relatedListPane.getChildren().setAll(emptyRelatedListText);
+        relatedListPane.getChildren().setAll(new Text(""));
         description.setText("Please select a Journal Entry...");
         date.setText("");
         tags.getChildren().clear();
     }
 
     private void setContent(Entry entry) {
+        this.calendar.setImage(getImage("/images/calendar_1.png"));
         title.setText(entry.getTitle().title);
         if (entry.getContactList().isEmpty()) {
             relatedListPane.getChildren().setAll(emptyRelatedListText);

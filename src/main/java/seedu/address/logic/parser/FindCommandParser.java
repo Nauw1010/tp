@@ -75,43 +75,55 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
             if (arePrefixesPresent(argMultimap, PREFIX_NAME)) {
                 assert argMultimap.getValue(PREFIX_NAME).isPresent();
-                String nameKeyWord = argMultimap.getValue(PREFIX_NAME).get().trim();
+                String nameKeyWord =
+                        argMultimap.getValue(PREFIX_NAME).get().trim().toLowerCase();
                 personPredicate =
-                        personPredicate.and(person -> person.getName().fullName.contains(nameKeyWord));
+                        personPredicate.and(person -> person.getName().fullName
+                                .toLowerCase()
+                                .contains(nameKeyWord));
             }
             if (arePrefixesPresent(argMultimap, PREFIX_EMAIL)) {
                 assert argMultimap.getValue(PREFIX_EMAIL).isPresent();
-                String emailKeyWord = argMultimap.getValue(PREFIX_EMAIL).get().trim();
+                String emailKeyWord =
+                        argMultimap.getValue(PREFIX_EMAIL).get().trim().toLowerCase();
                 personPredicate =
                         personPredicate.and(person -> {
                             if (person.getEmail().equals(Email.EMPTY_EMAIL)) {
                                 return false;
                             } else {
-                                return person.getEmail().value.contains(emailKeyWord);
+                                return person.getEmail().value
+                                        .toLowerCase()
+                                        .contains(emailKeyWord);
                             }
                         });
             }
             if (arePrefixesPresent(argMultimap, PREFIX_ADDRESS)) {
                 assert argMultimap.getValue(PREFIX_ADDRESS).isPresent();
-                String addressKeyWord = argMultimap.getValue(PREFIX_ADDRESS).get().trim();
+                String addressKeyWord =
+                        argMultimap.getValue(PREFIX_ADDRESS).get().trim().toLowerCase();
                 personPredicate =
                         personPredicate.and(person -> {
                             if (person.getAddress().equals(Address.EMPTY_ADDRESS)) {
                                 return false;
                             } else {
-                                return person.getAddress().value.contains(addressKeyWord);
+                                return person.getAddress().value
+                                        .toLowerCase()
+                                        .contains(addressKeyWord);
                             }
                         });
             }
             if (arePrefixesPresent(argMultimap, PREFIX_PHONE)) {
                 assert argMultimap.getValue(PREFIX_PHONE).isPresent();
-                String phoneKeyWord = argMultimap.getValue(PREFIX_PHONE).get().trim();
+                String phoneKeyWord =
+                        argMultimap.getValue(PREFIX_PHONE).get().trim().toLowerCase();
                 personPredicate =
                         personPredicate.and(person -> {
                             if (person.getPhone().equals(Phone.EMPTY_PHONE)) {
                                 return false;
                             } else {
-                                return person.getPhone().value.contains(phoneKeyWord);
+                                return person.getPhone().value
+                                        .toLowerCase()
+                                        .contains(phoneKeyWord);
                             }
                         });
             }
@@ -126,19 +138,25 @@ public class FindCommandParser implements Parser<FindCommand> {
             }
             if (arePrefixesPresent(argMultimap, PREFIX_NAME)) {
                 assert argMultimap.getValue(PREFIX_NAME).isPresent();
-                String titleKeyWord = argMultimap.getValue(PREFIX_NAME).get().trim();
+                String titleKeyWord =
+                        argMultimap.getValue(PREFIX_NAME).get().trim().toLowerCase();
                 entryPredicate =
-                        entryPredicate.and(entry -> entry.getTitle().title.contains(titleKeyWord));
+                        entryPredicate.and(entry -> entry.getTitle().title
+                                .toLowerCase()
+                                .contains(titleKeyWord));
             }
             if (arePrefixesPresent(argMultimap, PREFIX_DESCRIPTION)) {
                 assert argMultimap.getValue(PREFIX_DESCRIPTION).isPresent();
-                String descriptionKeyWord = argMultimap.getValue(PREFIX_DESCRIPTION).get().trim();
+                String descriptionKeyWord =
+                        argMultimap.getValue(PREFIX_DESCRIPTION).get().trim().toLowerCase();
                 entryPredicate =
                         entryPredicate.and(entry -> {
                             if (entry.getDescription().equals(Description.EMPTY_DESCRIPTION)) {
                                 return false;
                             } else {
-                                return entry.getDescription().description.contains(descriptionKeyWord);
+                                return entry.getDescription().description
+                                        .toLowerCase()
+                                        .contains(descriptionKeyWord);
                             }
                         });
             }
@@ -153,7 +171,9 @@ public class FindCommandParser implements Parser<FindCommand> {
                     name -> entry
                         .getContactList().stream()
                             .anyMatch(
-                                person -> person.getName().fullName.contains(name))));
+                                person -> person.getName().fullName
+                                        .toLowerCase()
+                                        .contains(name.toLowerCase()))));
             Set<Tag> tagList1 = ParserUtil.parseTags(argMultimap.getAllValues(PREFIX_TAG));
             entryPredicate = entryPredicate.and(entry -> entry.getTags().containsAll(tagList1));
             return new FindJournalEntryCommand(entryPredicate);

@@ -23,7 +23,8 @@ import seedu.address.model.person.Person;
  * Represents the in-memory model of the address book data.
  */
 public class ModelManager implements Model {
-    private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
+    private static final Logger logger =
+            LogsCenter.getLogger(ModelManager.class);
 
     private final AddressBook addressBook;
     private final Journal journal;
@@ -47,7 +48,13 @@ public class ModelManager implements Model {
         super();
         requireAllNonNull(addressBook, journal, userPrefs);
 
-        logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
+        logger.fine(
+                String.format(
+                        "Initializing with address book: %s and user prefs %s",
+                        addressBook,
+                        userPrefs
+                )
+        );
 
         this.addressBook = new AddressBook(addressBook);
         this.journal = new Journal(journal);
@@ -120,6 +127,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean hasName(Person person) {
+        requireNonNull(person);
+        return addressBook.hasName(person);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         requireNonNull(target);
         addressBook.removePerson(target);
@@ -181,6 +194,13 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public void updateJournalContacts(
+            Person originalPerson, Person updatedPerson) {
+        requireAllNonNull(originalPerson, updatedPerson);
+        journal.updateJournalContacts(originalPerson, updatedPerson);
+    }
+
+    @Override
     public void updateAlias(Map<String, ValidCommand> map) {
         requireNonNull(map);
         aliasMap.updateMap(map);
@@ -199,11 +219,11 @@ public class ModelManager implements Model {
         metBeforePersons.setPredicate(this::hasMetBefore);
     }
 
-    //=========== Filtered Person List Accessors =============================================================
+    //=========== Filtered Person List Accessors ===============================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
-     * {@code versionedAddressBook}
+     * Returns an unmodifiable view of the list of {@code Person} backed by the
+     * internal list of {@code versionedAddressBook}
      */
     @Override
     public ObservableList<Person> getFilteredPersonList() {
@@ -225,8 +245,8 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Returns an unmodifiable view of the list of {@code Journal} backed by the internal list of
-     * {@code versionedAddressBook}
+     * Returns an unmodifiable view of the list of {@code Journal} backed by the
+     * internal list of {@code versionedAddressBook}
      */
     @Override
     public ObservableList<Entry> getFilteredEntryList() {

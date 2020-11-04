@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +9,7 @@ import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.parser.exceptions.AliasExistsException;
+import seedu.address.logic.parser.exceptions.AliasNotFoundException;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.ReadOnlyAliasMap;
 
@@ -32,7 +35,9 @@ public enum ValidCommand {
     SWITCH("switch", "swt"),
     VIEW("view", "v"),
     CHECK_SCHEDULE("check", "ck"),
-    ADD_ALIAS("alias", "al");
+    ADD_ALIAS("alias", "al"),
+    CHANGE_THEME("changetheme", "ctheme"),
+    DELETE_ALIAS("deletea", "dela");
 
     private static final Logger logger = LogsCenter.getLogger(ValidCommand.class);
 
@@ -90,7 +95,18 @@ public enum ValidCommand {
         return command;
     }
 
-    //TODO: If we need to support this functionality, we need to find a way to store the user preference of alias.
+    /**
+     * Remove an alias from map.
+     */
+    public static void deleteAlias(String alias) throws AliasNotFoundException {
+        requireNonNull(alias);
+
+        if (!aliasMap.containsKey(alias)) {
+            throw new AliasNotFoundException();
+        }
+
+        aliasMap.remove(alias);
+    }
 
     /**
      * Add a new {@code alias} to a valid command.

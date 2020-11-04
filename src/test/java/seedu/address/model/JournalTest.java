@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalEntries.TEST_ENTRY_DEFAULT;
+import static seedu.address.testutil.TypicalEntries.TEST_ENTRY_DIFF_CONTACTS;
 import static seedu.address.testutil.TypicalEntries.getTypicalEntries;
 import static seedu.address.testutil.TypicalEntries.getTypicalJournal;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.CARL;
+import static seedu.address.testutil.TypicalPersons.getTypicalPersons;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,8 +22,9 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.journal.Entry;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
-import seedu.address.testutil.Assert;
 import seedu.address.testutil.EntryBuilder;
+import seedu.address.testutil.JournalBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 
 public class JournalTest {
@@ -71,12 +75,68 @@ public class JournalTest {
     }
 
     @Nested
+    @DisplayName("updateJournalContacts method")
+    class UpdateJournalContacts {
+        @Test
+        @DisplayName("should throw NullPointerException if editedPerson is "
+                + "null")
+        public void updateJournalContacts_nullEditedPerson_throwsNullPointerException() {
+            assertThrows(
+                    NullPointerException.class, () ->
+                            journal.updateJournalContacts(
+                                    getTypicalPersons().get(0),
+                                    null
+                            )
+            );
+        }
+
+        @Test
+        @DisplayName("should throw NullPointerException if target is null")
+        public void updateJournalContacts_nullTarget_throwsNullPointerException() {
+            assertThrows(
+                    NullPointerException.class, () ->
+                            journal.updateJournalContacts(
+                                    null,
+                                    new PersonBuilder().build()
+                            )
+            );
+        }
+
+        @Test
+        @DisplayName("should update journal involving contacts the updated "
+                + "contact")
+        public void updateJournalContacts_validPersons_successful() {
+            Person newPerson = new PersonBuilder(CARL)
+                    .withName("Peter")
+                    .withPhone("12345")
+                    .build();
+            Entry entryOne = new EntryBuilder(TEST_ENTRY_DIFF_CONTACTS).build();
+            Entry entryTwo = new EntryBuilder().withContacts(CARL).build();
+            Entry newEntryOne = new EntryBuilder(entryOne).build();
+            Entry newEntryTwo = new EntryBuilder(entryTwo).build();
+            newEntryOne.setContact(CARL, newPerson);
+            newEntryTwo.setContact(CARL, newPerson);
+            Journal originalJournal = new JournalBuilder()
+                    .withEntry(entryOne)
+                    .withEntry(entryTwo)
+                    .build();
+            Journal expectedJournal = new JournalBuilder()
+                    .withEntry(newEntryOne)
+                    .withEntry(newEntryTwo)
+                    .build();
+
+            originalJournal.updateJournalContacts(CARL, newPerson);
+            assertEquals(expectedJournal, originalJournal);
+        }
+    }
+
+    @Nested
     @DisplayName("getEntryList method")
     class GetEntryList {
         @Test
         @DisplayName("should throw UnsupportedOperationException")
         public void getEntryList_modifyList_throwsUnsupportedOperationException() {
-            Assert.assertThrows(UnsupportedOperationException.class, () ->
+            assertThrows(UnsupportedOperationException.class, () ->
                     journal.getEntryList().remove(0));
         }
     }

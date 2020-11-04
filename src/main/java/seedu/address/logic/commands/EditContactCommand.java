@@ -54,6 +54,8 @@ public class EditContactCommand extends Command {
             "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON =
             "This person already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_NAME =
+            "This name already exists in the address book.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -84,15 +86,21 @@ public class EditContactCommand extends Command {
         Person editedPerson = createEditedPerson(
                 personToEdit, editPersonDescriptor);
 
-        if (!personToEdit.isSamePerson(editedPerson)
-                && model.hasPerson(editedPerson)) {
+        if (!personToEdit.hasSameName(editedPerson)
+                && model.hasName(editedPerson)) {
+            // Name has been changed, need to check if new name is a duplicate
+            throw new CommandException(MESSAGE_DUPLICATE_NAME);
+        }
+        if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
         model.setPerson(personToEdit, editedPerson);
+        model.updateJournalContacts(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(
-                String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson));
+                String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedPerson))
+                .setViewingPerson(editedPerson);
     }
 
     /**

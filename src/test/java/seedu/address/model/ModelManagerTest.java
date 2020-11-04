@@ -6,13 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalEntries.TEST_ENTRY_DIFF_CONTACTS;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.CARL;
+import static seedu.address.testutil.TypicalPersons.getTypicalPersons;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,8 +25,11 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.journal.Entry;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 import seedu.address.testutil.AddressBookBuilder;
 import seedu.address.testutil.EntryBuilder;
+import seedu.address.testutil.JournalBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -131,6 +138,73 @@ public class ModelManagerTest {
             assertTrue(modelManager.hasPerson(ALICE));
         }
     }
+
+    @Nested
+    @DisplayName("updateJournalContacts method")
+    class UpdateJournalContacts {
+        @Test
+        @DisplayName("should throw NullPointerException if editedPerson is "
+                + "null")
+        public void updateJournalContacts_nullEditedPerson_throwsNullPointerException() {
+            Assertions.assertThrows(
+                    NullPointerException.class, () ->
+                            modelManager.updateJournalContacts(
+                                    getTypicalPersons().get(0),
+                                    null
+                            )
+            );
+        }
+
+        @Test
+        @DisplayName("should throw NullPointerException if target is null")
+        public void updateJournalContacts_nullTarget_throwsNullPointerException() {
+            Assertions.assertThrows(
+                    NullPointerException.class, () ->
+                            modelManager.updateJournalContacts(
+                                    null,
+                                    new PersonBuilder().build()
+                            )
+            );
+        }
+
+        @Test
+        @DisplayName("should update journal involving contacts the updated "
+                + "contact")
+        public void updateJournalContacts_validPersons_successful() {
+            Person newPerson = new PersonBuilder(CARL)
+                    .withName("Peter")
+                    .withPhone("12345")
+                    .build();
+            Entry entryOne = new EntryBuilder(TEST_ENTRY_DIFF_CONTACTS).build();
+            Entry entryTwo = new EntryBuilder().withContacts(CARL).build();
+            Entry newEntryOne = new EntryBuilder(entryOne).build();
+            Entry newEntryTwo = new EntryBuilder(entryTwo).build();
+            newEntryOne.setContact(CARL, newPerson);
+            newEntryTwo.setContact(CARL, newPerson);
+            ModelManager original = new ModelManager(
+                    new AddressBook(),
+                    new JournalBuilder()
+                            .withEntry(entryOne)
+                            .withEntry(entryTwo)
+                            .build(),
+                    new UserPrefs(),
+                    new AliasMap()
+            );
+            ModelManager expected = new ModelManager(
+                    new AddressBook(),
+                    new JournalBuilder()
+                            .withEntry(newEntryOne)
+                            .withEntry(newEntryTwo)
+                            .build(),
+                    new UserPrefs(),
+                    new AliasMap()
+            );
+
+            original.updateJournalContacts(CARL, newPerson);
+            assertEquals(expected, original);
+        }
+    }
+
 
     @Nested
     @DisplayName("getFilteredPersonList method")

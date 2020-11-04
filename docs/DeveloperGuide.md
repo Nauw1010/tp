@@ -132,7 +132,7 @@ The `Storage` component,
 
 Classes used by multiple components are in the `seedu.addressbook.commons` package.
 
---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## **Implementation**
 
@@ -208,10 +208,10 @@ Given below is the class diagram of related part of command alias feature:
 
 Note:
 
-*`XYZCOMMAND` represents the enumeration element for valid commands that can be used in the system*
-*`ValidCommand#commandTypeOf(String commandWord)` takes in a command keyword (eg. addj, addc, findc...) and returns a `ValidCommand` which will be used by `IntelliJournalParser`*
+* `XYZCOMMAND` represents the enumeration element for valid commands that can be used in the system*
+* `ValidCommand#commandTypeOf(String commandWord)` takes in a command keyword (eg. addj, addc, findc...) and returns a `ValidCommand` which will be used by `IntelliJournalParser`*
 
-*`IntelliJournalParser#parseCommand(String UserInput)` detect the command word and pass in to the `ValidCommand#commandTypeOf(String commandWord)` to find the valid command and produce the `Command` accordingly*
+* `IntelliJournalParser#parseCommand(String UserInput)` detect the command word and pass in to the `ValidCommand#commandTypeOf(String commandWord)` to find the valid command and produce the `Command` accordingly*
 
 Given below is the sequence diagram of command alias feature (This change only related to `Logic` component, so we omit the execution detail in model):
 
@@ -219,9 +219,10 @@ Given below is the sequence diagram of command alias feature (This change only r
 
 ### Tab navigation feature
 
-IntelliJournal has two tabs for different information to display, one tab for `Addressbook`
-and another for `Journal`. The implementation of the tab UI is not the focus in this
-section, under this section, it is described how commands navigates from tab to tab.
+IntelliJournal has two tabs for different information to display, one tab for
+`AddressBook` and another for `Journal`. The implementation of the tab UI is not
+the focus in this section, under this section, it is described how commands
+navigates from tab to tab.
 
 #### Current Implementation
 
@@ -294,8 +295,8 @@ The `help` command of IntelliJournal allows users to check the usage of a specif
 command, or get the link to the User Guide for the usage of all commands.
 #### Current Implementation
 In the current version of IntelliJournal, the help feature is implemented with
- both `HelpCommand` and `HelpCommandParser`. If the user input starts with `help`,
- the `IntelliJournalParser` will catch it and pass the rest input into `HelpCommandParser`.
+both `HelpCommand` and `HelpCommandParser`. If the user input starts with `help`,
+the `IntelliJournalParser` will catch it and pass the rest input into `HelpCommandParser`.
 
 Within the `HelpCommandParser`, there are mainly 3 execution path:
 1. If the argument starts with `of/` prefix, it will parse the argument behind `of/` to a
@@ -324,102 +325,6 @@ Similar to the existing `editc` and `addj` commands, the `EditJournalEntryParser
 The following sequence diagram shows how the edit command works:
 ![EditJournalSequenceDiagram](images/EditJournalSequenceDiagram.png)
 
-
-
-### Tab navigation feature
-
-IntelliJournal has two tabs for different information to display, one tab for `Addressbook`
-and another for `Journal`. The implementation of the tab UI is not the focus in this
-section, under this section, it is described how commands navigates from tab to tab.
-
-#### Current Implementation
-
-The current implementation is to keep track of `boolean` variables under `CommandResult`
-class. In `MainWindow`, when `Logic` executes a command, the returned `CommandResult` will specify the
-tab navigation behaviours of the executed command, and therefore `MainWindow` can
-make `Ui` changes to IntelliJournal and complete the tab navigation.
-
-`CommandResult` implements the following methods to specify tab navigation behaviors.
-* `public boolean isAddressBookTab()` - Returns `true` if the command needs to
-display the `AddressBook` tab, returns `false` is the command needs to display
-the `Journal` tab.
-*  `public boolean isSwitch()` - Returns `true` if the command requires to switch
-the current displaying tab to the other.
-* `public boolean isSameTab()` - Reuturns `true` if the command requires to remain
-the current displaying tab.
-
-In `Command` classes, the `execute(Model model)` method returns a `CommandResult`
-object. We assume the object to return is `commandResult` which does not have any
-specifications on tab navigation behavior. In order to specify the tab navigation
-behavior, one can call methods of `CommandResult` and return the following objects
-instead.
-* `commandResult.setAddressBookTab()` - Specifies the returned `CommandResult` to
-navigate to `AddressBook` tab (i.e. `isAddressBookTab()` of the returned object
-returns `true`).
-* `commandResult.setJournalTab()` - Specifies the returned `CommandResult` to
-navigate to `Journal` tab (i.e. `isAddressBookTab()` of the returned object returns
-`false`).
-* `commandResult.setSwitch()` - Specifies the returned `CommandResult` to switch the
-current displaying tab to the other tab (i.e. `isSwitch()` returns `false`).
-* `commandResult.setSameTab()` - Specifies the returned `CommandResult` to say on
-the same displaying tab as before the execution of the current command (i.e.
-`isSameTab()` returns `true`).
-
-In `MainWindow#executeCommand`, the method will examine the returned `CommandResult`
-object after `Logic` executes the command. The activity diagram below shows how
-`MainWindow#executeCommand` handles tab navigation.
-
-![MainWindowTabNavigationActivity](images/MainWindowTabNavigationActivityDiagram.png)
-
-### Check schedule feature
-
-IntelliJournal allows for users to check all journal entries for a given day,
-allowing them to check their schedule for the given day.
-
-#### Current Implementation
-
-The current implementation makes use of the `CheckScheduleCommandParser` as well
-as the `CheckScheduleCommand` classes. When `AddressBookParser` parses the
-command and finds the `check` command, the rest of the command is passed into
-the `CheckScheduleCommandParser`, where the rest of the command is parsed.
-
-If the rest of the command is empty, the command is parsed as though we are
-using the local date of the machine. Otherwise, if the rest of the command is
-not a valid date, we throw an error.
-
-The activity diagram for the parsing of command is given below.
-
-![CheckScheduleActivityDiagram](images/CheckScheduleActivityDiagram.png)
-
-The following sequence diagrams show how the check schedule command works:
-
-![CheckScheduleSequenceDiagram](images/CheckScheduleSequenceDiagram.png)
-
-In `MainWindow#executeCommand`, the returned `CommandResult` will then set the
-tab back to the journal tab if the user is viewing the AddressBook tab.
-
-### Help feature
-The `help` command of IntelliJournal allows users to check the usage of a specific
-command, or get the link to the User Guide for the usage of all commands.
-#### Current Implementation
-In the current version of IntelliJournal, the help feature is implemented with
-both `HelpCommand` and `HelpCommandParser`. If the user input starts with `help`,
-the `AddressBookParser` will catch it and pass the rest input into `HelpCommandParser`.
-
-Within the `HelpCommandParser`, there are mainly 3 execution path:
-1. If the argument starts with `of/` prefix, it will parse the argument behind `of/` to a
-`ValidCommand`, and return a HelpCommand with the `ValidCommand`.
-2. If the argument is empty, it will return a `HelpCommand` with the boolean term
-`isShowHelpWindow` set to be `true`.
-3. Else, it will throw an `ParseException`.
-
-Back to `HelpCommand`, it will choose return a `CommandResult` which can make `MainWindow`
-to show the help window if the `isShowHelpWindow` is `true`. Or it will return a
-`CommandResult` which could print the usage of a certain valid command into result box.
-
-The following sequence diagrams show how the help command works:
-![HelpSequenceDiagram](images/HelpSequenceDiagram.png)
-
 ### Edit journal feature
 #### Current Implementation
 
@@ -445,6 +350,12 @@ public void setTags(Set<Tag> tags) {
 }
 ```
 Note that a new `UniquePersonList` is created whenever `setContactList` is called, rather than to simply check if `contactList` is null like in `setTags`.
+The resulting `EditJournalDescriptor` object is used along with the `Index` specified to create an
+ `EditJournalEntryCommand`, which contains methods to search through and add valid contacts to a resulting `Entry`.
+
+ The following sequence diagram shows how the Edit Journal Entry command works:
+![EditJournalSequenceDiagram](images/EditJournalSequenceDiagram.png)
+
 
 ### \[Proposed\] Undo/redo feature
 
@@ -489,11 +400,15 @@ The following sequence diagram shows how the undo operation works:
 
 ![UndoSequenceDiagram](images/UndoSequenceDiagram.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
+<div markdown="span" class="alert alert-info">
+:information_source: **Note:** The lifeline for `UndoCommand` should end at the
+destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the
+end of diagram.
 </div>
 
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
+The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which
+shifts the `currentStatePointer` once to the right, pointing to the previously
+undone state, and restores the address book to that state.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
 
@@ -519,10 +434,11 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+* **Alternative 2:** Individual command knows how to undo/redo by itself.
+  * Pros: Will use less memory (e.g. for `delete`, just save the person being
+          deleted).
+  * Cons: We must ensure that the implementation of each individual command are
+          correct.
 
 _{more aspects and alternatives to be added}_
 
@@ -531,7 +447,7 @@ _{more aspects and alternatives to be added}_
 _{Explain here how the data archiving feature will be implemented}_
 
 
---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
 
@@ -541,7 +457,7 @@ _{Explain here how the data archiving feature will be implemented}_
 * [Configuration guide](Configuration.md)
 * [DevOps guide](DevOps.md)
 
---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## **Appendix: Requirements**
 
@@ -579,7 +495,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `intelliJournal` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `IntelliJournal` and the
+**Actor** is the `user`, unless specified otherwise)
 
 **Use case: Delete a person**
 
@@ -646,9 +563,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `11` or above installed.
-2.  Should be able to hold up to 1000 persons and journals without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1.  Should work on any _mainstream OS_ as long as it has Java `11` or above
+    installed.
+2.  Should be able to hold up to 1000 persons and journals without a noticeable
+    sluggishness in performance for typical usage.
+3.  A user with above average typing speed for regular English text (i.e. not
+    code, not system admin commands) should be able to accomplish most of the
+    tasks faster using commands than using the mouse.
 
 *{More to be added}*
 
@@ -656,7 +577,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 
---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
 
@@ -673,14 +594,16 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file Expected: Shows the GUI with a set of sample
+      contacts. The window size may not be optimum.
 
 1. Saving window preferences
 
-   1. Resize the window to an optimum size. Move the window to a different location. Close the window.
+   1. Resize the window to an optimum size. Move the window to a different
+      location. Close the window.
 
    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+      Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
 
@@ -688,15 +611,20 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a person while all persons are being shown
 
-   1. Prerequisites: List all persons using the `listc` command. Multiple persons in the list.
+   1. Prerequisites: List all persons using the `listc` command. Multiple
+      persons in the list.
 
    1. Test case: `deletec 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First contact is deleted from the list. Details of the deleted
+                contact shown in the status message. Timestamp in the status bar
+                is updated.
 
    1. Test case: `deletec 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No person is deleted. Error details shown in the status message.
+                Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `deletec`, `deletec x`, `...` (where x is larger than the list size)<br>
+   1. Other incorrect delete commands to try: `deletec`, `deletec x`, `...`
+                (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_

@@ -26,7 +26,7 @@ public class EntryBuilder {
     private Set<Tag> tags;
 
     // Represents a contact list for a certain event
-    private final UniquePersonList contactList;
+    private UniquePersonList contactList;
 
     /**
      * Initialize the Entry with default value.
@@ -99,6 +99,7 @@ public class EntryBuilder {
      * Adds person to the contact list.
      */
     public EntryBuilder withContacts(Person... persons) {
+        contactList = new UniquePersonList();
         Arrays.stream(persons).forEach(contactList::add);
         return this;
     }

@@ -48,7 +48,8 @@ public class AddAliasCommand extends Command {
 
         model.updateAlias(ValidCommand.getAliasMap());
 
-        return new CommandResult(String.format(MESSAGE_ADD_ALIAS_SUCCEED, alias, targetCommand));
+        return new CommandResult(String.format(MESSAGE_ADD_ALIAS_SUCCEED, alias, targetCommand))
+                .setSameTab();
     }
 
     @Override

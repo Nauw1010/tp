@@ -4,16 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.testutil.TypicalEntries.getTypicalJournal;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,6 +47,14 @@ public class EditContactCommandTest {
             new UserPrefs(),
             new AliasMap()
     );
+
+    @AfterAll
+    public static void cleanUp() {
+        getTypicalJournal().updateJournalContacts(new PersonBuilder(ALICE)
+                .withName(VALID_NAME_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .build(ALICE.getUuid()), ALICE);
+    }
 
     @Nested
     @DisplayName("execute method")
@@ -155,6 +167,54 @@ public class EditContactCommandTest {
         }
 
         @Test
+        @DisplayName("should update entries involving the person edited")
+        public void execute_personInvolved_successful() {
+            EditContactCommand editContactCommand = new EditContactCommand(
+                    INDEX_FIRST_PERSON,
+                    new EditPersonDescriptorBuilder()
+                            .withName(VALID_NAME_BOB)
+                            .withEmail(VALID_EMAIL_BOB)
+                            .build()
+            );
+            Person editedPerson = new PersonBuilder(ALICE)
+                    .withName(VALID_NAME_BOB)
+                    .withEmail(VALID_EMAIL_BOB)
+                    .build(ALICE.getUuid());
+
+            Model originalModel = new ModelManager(
+                    new AddressBook(getTypicalAddressBook()),
+                    new Journal(getTypicalJournal()),
+                    new UserPrefs(),
+                    new AliasMap()
+            );
+
+            AddressBook addressBook = new AddressBook(getTypicalAddressBook());
+            Journal journal = new Journal(getTypicalJournal());
+            addressBook.setPerson(
+                    ALICE,
+                    editedPerson
+            );
+            journal.updateJournalContacts(ALICE, editedPerson);
+
+            Model expectedModel = new ModelManager(
+                    addressBook,
+                    journal,
+                    new UserPrefs(),
+                    new AliasMap()
+            );
+            String expectedMessage = String.format(
+                    EditContactCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                    editedPerson
+            );
+            assertCommandSuccess(
+                    editContactCommand,
+                    originalModel,
+                    expectedMessage,
+                    expectedModel
+            );
+        }
+
+        @Test
         @DisplayName("should successfully edit a person in a filtered list")
         public void execute_filteredList_success() {
             showPersonAtIndex(model, INDEX_FIRST_PERSON);
@@ -182,6 +242,7 @@ public class EditContactCommandTest {
                             new UserPrefs(),
                             new AliasMap()
                     );
+
             expectedModel.setPerson(
                     model.getFilteredPersonList().get(0),
                     editedPerson
@@ -208,7 +269,7 @@ public class EditContactCommandTest {
             assertCommandFailure(
                     editContactCommand,
                     model,
-                    EditContactCommand.MESSAGE_DUPLICATE_PERSON
+                    EditContactCommand.MESSAGE_DUPLICATE_NAME
             );
         }
 
@@ -230,7 +291,7 @@ public class EditContactCommandTest {
             assertCommandFailure(
                     editContactCommand,
                     model,
-                    EditContactCommand.MESSAGE_DUPLICATE_PERSON
+                    EditContactCommand.MESSAGE_DUPLICATE_NAME
             );
         }
 
@@ -253,7 +314,7 @@ public class EditContactCommandTest {
             );
         }
 
-        /**
+        /*
          * Edit filtered list where index is larger than size of filtered list,
          * but smaller than size of address book
          */

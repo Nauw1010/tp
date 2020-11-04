@@ -2,8 +2,10 @@ package seedu.address.ui;
 
 import java.util.logging.Logger;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
@@ -19,6 +21,8 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.journal.Entry;
+import seedu.address.model.person.Person;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -27,6 +31,8 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
+    private static final String THEME_DARK = "view/DarkTheme.css";
+    private static final String THEME_BRIGHT = "view/ColorScheme_1.css";
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
@@ -43,6 +49,9 @@ public class MainWindow extends UiPart<Stage> {
 
     private DashboardTab dashboardTab;
 
+
+    @FXML
+    private Scene primaryScene;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -147,8 +156,10 @@ public class MainWindow extends UiPart<Stage> {
         entryListPanelPlaceholder.getChildren().add(entryListPanel.getRoot());
 
         contactContent = new ContactContent();
+        contactContent.setContactContentToUser(personListPanel.getPersonListItems().get(0));
         contactContentPlaceholder.getChildren().add(contactContent.getRoot());
         entryContent = new EntryContent();
+        entryContent.setEntryContentToUser(entryListPanel.getEntryListItems().get(0));
         entryContentPlaceholder.getChildren().add(entryContent.getRoot());
 
         dashboardTab = new DashboardTab(logic.getRecentPersonList(), logic.getFrequentPersonList());
@@ -164,6 +175,7 @@ public class MainWindow extends UiPart<Stage> {
         commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
     }
 
+    //@@author {Nauw1010}
     /**
      * Configures all the listeners.
      */
@@ -171,6 +183,7 @@ public class MainWindow extends UiPart<Stage> {
         entryListPanel.setListenerToSelectedChangesAndPassToEntryContent(entryContent);
         personListPanel.setListenerToSelectedChangesAndPassToContactContent(contactContent);
     }
+    //@@author
 
     /**
      * Sets the default size based on {@code guiSettings}.
@@ -197,6 +210,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     void show() {
+        primaryScene.getStylesheets().add(THEME_BRIGHT);
         primaryStage.show();
     }
 
@@ -212,6 +226,22 @@ public class MainWindow extends UiPart<Stage> {
         primaryStage.hide();
     }
 
+    //@@author {Nauw1010}
+    /**
+     * Changes the color theme.
+     */
+    @FXML
+    private void handleChangeTheme() {
+        ObservableList<String> styleSheetList = primaryScene.getStylesheets();
+
+        if (styleSheetList.get(styleSheetList.size() - 1).equals(THEME_DARK)) {
+            styleSheetList.set(styleSheetList.size() - 1, THEME_BRIGHT);
+        } else {
+            styleSheetList.set(styleSheetList.size() - 1, THEME_DARK);
+        }
+    }
+    //@@author
+
     /**
      * Executes the command and returns the result.
      *
@@ -220,6 +250,8 @@ public class MainWindow extends UiPart<Stage> {
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
             CommandResult commandResult = logic.execute(commandText);
+            personListPanel.select();
+            entryListPanel.select();
             logger.info("Execute result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
@@ -241,12 +273,22 @@ public class MainWindow extends UiPart<Stage> {
                 }
             }
 
+            if (commandResult.isViewingPerson()) {
+                Person personToView = commandResult.getPersonToView();
+                personListPanel.select(logic.getFilteredPersonList().indexOf(personToView));
+            }
+
             if (commandResult.isViewingJournal()) {
-                handleViewingJournal();
+                Entry entryToView = commandResult.getEntryToView();
+                entryListPanel.select(logic.getFilteredEntryList().indexOf(entryToView));
             }
 
             if (commandResult.isCleaningJournalView()) {
                 handleCleaningJournalView();
+            }
+
+            if (commandResult.isChangingTheme()) {
+                handleChangeTheme();
             }
 
             return commandResult;
@@ -271,10 +313,6 @@ public class MainWindow extends UiPart<Stage> {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         int selectedIndex = selectionModel.getSelectedIndex();
         selectionModel.select((selectedIndex + 1) % 3);
-    }
-
-    private void handleViewingJournal() {
-        entryContent.setEntryContentToUser(logic.getFilteredEntryList().get(0));
     }
 
     private void handleCleaningJournalView() {

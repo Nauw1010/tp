@@ -193,7 +193,7 @@
 
 .result-display {
     -fx-background-color: transparent;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Droid Sans";
     -fx-font-size: 13pt;
     -fx-text-fill: white;
 }
@@ -243,7 +243,7 @@
 
 .menu-bar .label {
     -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Droid Sans";
     -fx-text-fill: white;
     -fx-opacity: 0.9;
 }
@@ -368,7 +368,7 @@
     -fx-border-color: #383838 #383838 #ffffff #383838;
     -fx-border-insets: 0;
     -fx-border-width: 1;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Droid Sans";
     -fx-font-size: 13pt;
     -fx-text-fill: white;
 }
@@ -401,4 +401,12 @@
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: white;
     -fx-opacity: 1;
+}
+
+.icon-card {
+    -fx-icon-color: white;
+}
+
+.icon-content {
+    -fx-icon-color: white;
 }

@@ -1,5 +1,7 @@
 package seedu.address.model.journal;
 
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -79,6 +81,16 @@ public class Entry {
         }
 
         contactList.remove(person);
+    }
+
+    /**
+     * Removes the original contact and replaces them with the edited contact.
+     * @param target the original contact.
+     * @param editedPerson the edited contact.
+     */
+    public void setContact(Person target, Person editedPerson) {
+        requireAllNonNull(target, editedPerson);
+        contactList.setPerson(target, editedPerson);
     }
 
     /**

@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import seedu.address.logic.parser.ValidCommand;
 import seedu.address.model.Model;
 
+//@@author {Nauw1010}
 /**
  * Format full help instructions for every command for display.
  */
@@ -116,6 +117,10 @@ public class HelpCommand extends Command {
         case VIEW:
             return new CommandResult(
                     SHOWING_HELP_MESSAGE + ViewCommand.MESSAGE_USAGE
+            ).setSameTab();
+        case CHANGE_THEME:
+            return new CommandResult(
+                    SHOWING_HELP_MESSAGE + ChangeThemeCommand.MESSAGE_USAGE
             ).setSameTab();
         default:
             return new CommandResult(

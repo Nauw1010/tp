@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 public class Date {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Dates should be in the format such as \"2011-12-03 10:15\"";
+            "Dates should be in the format: \"YYYY-MM-DD HH:MM\"";
 
     public static final String VALID_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 

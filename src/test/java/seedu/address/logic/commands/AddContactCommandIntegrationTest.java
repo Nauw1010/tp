@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -37,7 +38,9 @@ public class AddContactCommandIntegrationTest {
         @Test
         @DisplayName("should successfully add new person")
         public void execute_newPerson_success() {
-            Person validPerson = new PersonBuilder().build();
+            Person validPerson = new PersonBuilder()
+                    .withName(VALID_NAME_AMY)
+                    .build();
 
             Model expectedModel = new ModelManager(
                     model.getAddressBook(), new Journal(), new UserPrefs(), new AliasMap());

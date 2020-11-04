@@ -31,7 +31,7 @@ public class ViewJournalEntryCommand extends ViewCommand {
         }
 
         Entry entryToView = lastShownList.get(targetIndex.getZeroBased());
-        model.updateFilteredEntryList(entry -> entry.isSameEntry(entryToView));
+        // model.updateFilteredEntryList(entry -> entry.isSameEntry(entryToView));
 
         return new CommandResult(
                 String.format(
@@ -39,7 +39,7 @@ public class ViewJournalEntryCommand extends ViewCommand {
                         "entry",
                         entryToView.toString()
                 )
-        ).setJournalTab().setViewingJournal();
+        ).setJournalTab().setViewingJournal(entryToView);
     }
 
     @Override

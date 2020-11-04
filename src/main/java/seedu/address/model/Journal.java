@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +59,7 @@ public class Journal implements ReadOnlyJournal {
 
         HashSet<Entry> toDeleteEntry = new HashSet<>();
 
-        for (Entry entry: entryList) {
+        for (Entry entry : entryList) {
             if (entry.isRelatedTo(person)) {
                 toDeleteEntry.add(entry);
             }
@@ -98,7 +99,7 @@ public class Journal implements ReadOnlyJournal {
      * Clear contact list for each entry.
      */
     public void clearContacts() {
-        for (Entry entry: entryList) {
+        for (Entry entry : entryList) {
             for (Person person: entry.getContactList()) {
                 entry.removeContact(person);
             }
@@ -107,6 +108,22 @@ public class Journal implements ReadOnlyJournal {
 
     public void setEntry(Entry target, Entry editedEntry) {
         entryList.setEntry(target, editedEntry);
+    }
+
+    /**
+     * Goes through the Journal and updates each entry involved with the
+     * original contact with the edited contact.
+     * @param target the original contact.
+     * @param editedPerson the edited contact.
+     */
+    public void updateJournalContacts(
+            Person target, Person editedPerson) {
+        requireAllNonNull(target, editedPerson);
+        for (Entry entry : entryList) {
+            if (entry.isRelatedTo(target)) {
+                entry.setContact(target, editedPerson);
+            }
+        }
     }
 
     @Override

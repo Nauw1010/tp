@@ -56,6 +56,7 @@ class JsonAdaptedEntryTest {
         @DisplayName("should return a valid entry if details are valid")
         public void toModelType_validEntry_returnsEntry()
                 throws IllegalValueException {
+            System.out.println(TEST_ENTRY_DIFF_CONTACTS);
             JsonAdaptedEntry entry =
                     new JsonAdaptedEntry(TEST_ENTRY_DIFF_CONTACTS);
             assertEquals(

@@ -31,11 +31,11 @@
             </HBox>
             <FlowPane fx:id="tags"/>
             <HBox alignment="CENTER_LEFT" spacing="5">
-                <FontIcon iconColor="#356859" iconLiteral="far-calendar-alt" iconSize="14"/>
+                <FontIcon styleClass="icon-card" iconLiteral="far-calendar-alt" iconSize="14"/>
                 <Label fx:id="date" styleClass="cell_small_label" text="\$date" wrapText="true"/>
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="5">
-                <FontIcon iconColor="#356859" iconLiteral="fas-user-circle" iconSize="13"/>
+                <FontIcon styleClass="icon-card" iconLiteral="fas-user-circle" iconSize="13"/>
                 <Label fx:id="relatedPersons" maxHeight="14.0" styleClass="cell_small_label" text="\$relatedPersons"
                        wrapText="true"/>
             </HBox>

@@ -6,14 +6,23 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalEntries.TEST_ENTRY_DEFAULT;
+import static seedu.address.testutil.TypicalEntries.TEST_ENTRY_DIFF_CONTACTS;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.CARL;
+import static seedu.address.testutil.TypicalPersons.getTypicalPersons;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.journal.exceptions.ContactNotInListException;
+import seedu.address.model.person.Person;
 import seedu.address.testutil.EntryBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class EntryTest {
 
@@ -43,6 +52,59 @@ public class EntryTest {
         @DisplayName("Should return false if the entry is null")
         public void isSameEntry_null_false() {
             assertFalse(TEST_ENTRY_DEFAULT.isSameEntry(null));
+        }
+    }
+
+    @Nested
+    @DisplayName("setContact method")
+    class SetContact {
+        private final Entry entry =
+                new EntryBuilder(TEST_ENTRY_DIFF_CONTACTS).build();
+
+        @Test
+        @DisplayName("should throw NullPointerException if editedPerson is "
+                + "null")
+        public void setContact_nullEditedPerson_throwsNullPointerException() {
+            Assertions.assertThrows(
+                    NullPointerException.class, () ->
+                            entry.setContact(
+                                    getTypicalPersons().get(0),
+                                    null
+                            )
+            );
+        }
+
+        @Test
+        @DisplayName("should throw NullPointerException if target is null")
+        public void setContact_nullTarget_throwsNullPointerException() {
+            Assertions.assertThrows(
+                    NullPointerException.class, () ->
+                            entry.setContact(
+                                    null,
+                                    new PersonBuilder().build()
+                            )
+            );
+        }
+
+        @Test
+        @DisplayName("should update journal involving contacts the updated "
+                + "contact")
+        public void setContact_validPersons_successful() {
+            List<Person> newContactList = entry.getContactList()
+                    .stream()
+                    .filter(person -> !person.equals(CARL))
+                    .collect(Collectors.toList());
+            Person newPerson = new PersonBuilder(CARL)
+                    .withName("Peter")
+                    .withAddress("abc road")
+                    .build(CARL.getUuid());
+            newContactList.add(newPerson);
+            Entry newEntry = new EntryBuilder(entry)
+                    .withContacts(newContactList.toArray(new Person[0]))
+                    .build();
+
+            entry.setContact(CARL, newPerson);
+            assertEquals(entry, newEntry);
         }
     }
 

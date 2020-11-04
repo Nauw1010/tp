@@ -29,7 +29,7 @@ public class UniqueEntryList implements Iterable<Entry> {
      * Returns an observable and unmodified list of the entries.
      */
     public ObservableList<Entry> asUnmodifiableObservableList() {
-        return this.internalUnmodifiableList;
+        return internalUnmodifiableList;
     }
 
     /**

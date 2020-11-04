@@ -61,6 +61,38 @@ public class UniquePersonListTest {
     }
 
     @Nested
+    @DisplayName("containsName method")
+    class ContainsName {
+        @Test
+        @DisplayName("should throw NullPointerException")
+        public void containsName_nullPerson_throwsNullPointerException() {
+            assertThrows(NullPointerException.class, () ->
+                    uniquePersonList.containsName(null));
+        }
+
+        @Test
+        @DisplayName("should return false if name not in list")
+        public void contains_personNotInList_returnsFalse() {
+            // sample contact with all fields
+            assertFalse(uniquePersonList.containsName(ALICE));
+
+            // sample contact with only name
+            assertFalse(uniquePersonList.containsName(
+                    new PersonBuilder()
+                            .setBlankFields()
+                            .build()
+            ));
+        }
+
+        @Test
+        @DisplayName("should return true if name in list")
+        public void contains_personInList_returnsTrue() {
+            uniquePersonList.add(ALICE);
+            assertTrue(uniquePersonList.containsName(ALICE));
+        }
+    }
+
+    @Nested
     @DisplayName("add method")
     class Add {
         @Test
@@ -78,6 +110,19 @@ public class UniquePersonListTest {
             assertThrows(DuplicatePersonException.class, () ->
                     uniquePersonList.add(ALICE));
         }
+
+        @Test
+        @DisplayName("should throw DuplicatePersonException if name is "
+                + "already in the list")
+        public void add_duplicateName_throwsDuplicatePersonException() {
+            uniquePersonList.add(ALICE);
+            assertThrows(DuplicatePersonException.class, () ->
+                    uniquePersonList.add(
+                            new PersonBuilder()
+                                    .setBlankFields()
+                                    .build()));
+        }
+
     }
 
     @Nested

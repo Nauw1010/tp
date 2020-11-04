@@ -13,6 +13,7 @@ import javafx.scene.layout.Region;
 import seedu.address.MainApp;
 import seedu.address.model.person.Person;
 
+//@@author {Nauw1010}
 public class ContactContent extends UiPart<Region> {
 
     private static final String FXML = "ContactContent.fxml";

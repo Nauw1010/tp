@@ -10,74 +10,71 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
 
-<?import javafx.scene.layout.Pane?>
-<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="IntelliJournal" type="javafx.stage.Stage"
-         xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root minHeight="600" minWidth="450" onCloseRequest="#handleExit" title="IntelliJournal" type="javafx.stage.Stage" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <icons>
-        <Image url="@/images/address_book_32.png"/>
+        <Image url="@/images/address_book_32.png" />
     </icons>
     <scene>
-        <Scene>
+        <Scene fx:id="primaryScene">
             <stylesheets>
-                <URL value="@ColorScheme_1.css"/>
-                <URL value="@Extensions.css"/>
+                <URL value="@Extensions.css" />
             </stylesheets>
 
             <VBox>
                 <MenuBar fx:id="menuBar" VBox.vgrow="NEVER">
                     <Menu mnemonicParsing="false" text="File">
-                        <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit"/>
+                        <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Theme">
+                        <MenuItem mnemonicParsing="false" onAction="#handleChangeTheme" text="Change" />
                     </Menu>
                     <Menu mnemonicParsing="false" text="Help">
-                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help"/>
+                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help" />
                     </Menu>
                 </MenuBar>
-                <JFXTabPane fx:id="tabPane" stylesheets="@ColorScheme_1.css" tabClosingPolicy="UNAVAILABLE"
-                            VBox.vgrow="ALWAYS">
+                <JFXTabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                     <tabs>
                         <Tab fx:id="dashBoardTab" text="Dashboard">
                             <content>
-                                <StackPane fx:id="dashboardTabPlaceHolder"/>
+                                <StackPane fx:id="dashboardTabPlaceHolder" />
                             </content>
                         </Tab>
                         <Tab fx:id="addressBookTab" text="Contacts">
                             <content>
                                 <HBox HBox.hgrow="ALWAYS">
-                                    <StackPane fx:id="personListPanelPlaceholder" styleClass="stack-pane" prefWidth="250.0"/>
-                                    <StackPane fx:id="contactContentPlaceholder" HBox.hgrow="ALWAYS"/>
+                                    <StackPane fx:id="personListPanelPlaceholder" prefWidth="250.0" styleClass="stack-pane" />
+                                    <StackPane fx:id="contactContentPlaceholder" HBox.hgrow="ALWAYS" />
                                 </HBox>
                             </content>
                         </Tab>
                         <Tab fx:id="journalTab" text="Journal">
                             <content>
                                 <HBox HBox.hgrow="ALWAYS">
-                                    <StackPane fx:id="entryListPanelPlaceholder" styleClass="stack-pane" prefWidth="250.0"/>
-                                    <StackPane fx:id="entryContentPlaceholder" HBox.hgrow="ALWAYS"/>
+                                    <StackPane fx:id="entryListPanelPlaceholder" prefWidth="250.0" styleClass="stack-pane" />
+                                    <StackPane fx:id="entryContentPlaceholder" HBox.hgrow="ALWAYS" />
                                 </HBox>
                             </content>
                         </Tab>
                     </tabs>
                 </JFXTabPane>
 
-                <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="100" prefHeight="100"
-                           styleClass="stack-pane" VBox.vgrow="NEVER">
+                <StackPane fx:id="resultDisplayPlaceholder" maxHeight="100" minHeight="100" prefHeight="100" styleClass="stack-pane" VBox.vgrow="NEVER">
                     <padding>
-                        <Insets bottom="5" left="10" right="10" top="5"/>
+                        <Insets bottom="5" left="10" right="10" top="5" />
                     </padding>
                 </StackPane>
 
                 <StackPane fx:id="commandBoxPlaceholder" styleClass="stack-pane" VBox.vgrow="NEVER">
                     <padding>
-                        <Insets bottom="5" left="10" right="10" top="5"/>
+                        <Insets bottom="5" left="10" right="10" top="5" />
                     </padding>
                 </StackPane>
 
-                <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER"/>
+                <StackPane fx:id="statusbarPlaceholder" VBox.vgrow="NEVER" />
             </VBox>
         </Scene>
     </scene>

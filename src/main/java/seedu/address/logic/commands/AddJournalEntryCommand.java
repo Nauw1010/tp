@@ -42,6 +42,8 @@ public class AddJournalEntryCommand extends Command {
             "New journal entry added: %1$s";
     public static final String MESSAGE_DUPLICATE_ENTRY =
             "This entry already exists in the journal";
+    public static final String MESSAGE_PERSON_NOT_FOUND =
+            "Person named %s does not exist in the address book!";
 
     private final Entry toAdd;
 
@@ -87,7 +89,7 @@ public class AddJournalEntryCommand extends Command {
 
         model.addEntry(validToAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, validToAdd))
-                .setJournalTab();
+                .setJournalTab().setViewingJournal(validToAdd);
     }
 
     @Override

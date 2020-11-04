@@ -8,6 +8,7 @@ participant ":EditJournalEntryCommandParser" as EditJournalEntryCommandParser LO
 participant ":ParserUtil" as ParserUtil LOGIC_COLOR
 participant ":EditEntryDescriptor" as EditEntryDescriptor LOGIC_COLOR
 participant "c:EditJournalEntryCommand" as EditJournalEntryCommand LOGIC_COLOR
+participant ":Model" as Model LOGIC_COLOR
 participant ":CommandResult" as CommandResult LOGIC_COLOR
 end box
 
@@ -59,6 +60,11 @@ deactivate IntelliJournalParser
 
 LogicManager -> EditJournalEntryCommand : execute(model)
 activate EditJournalEntryCommand
+EditJournalEntryCommand -> Model : getAddressBook()
+note right: Retrieves the list\nof contacts to\nsearch for specified \ncontacts
+activate Model
+Model --> EditJournalEntryCommand
+deactivate Model
 
 create CommandResult
 EditJournalEntryCommand -> CommandResult

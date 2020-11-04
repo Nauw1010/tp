@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import seedu.address.logic.commands.ChangeThemeCommand;
 import seedu.address.logic.commands.ClearAddressBookCommand;
 import seedu.address.logic.commands.ClearJournalCommand;
 import seedu.address.logic.commands.Command;
@@ -117,6 +118,12 @@ public class IntelliJournalParser {
 
         case ADD_ALIAS:
             return new AddAliasCommandParser().parse(arguments);
+
+        case CHANGE_THEME:
+            return new ChangeThemeCommand();
+
+        case DELETE_ALIAS:
+            return new DeleteAliasCommandParser().parse(arguments);
 
         default:
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);

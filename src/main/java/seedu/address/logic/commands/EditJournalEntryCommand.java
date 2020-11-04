@@ -60,7 +60,7 @@ public class EditJournalEntryCommand extends Command {
     private final EditEntryDescriptor editEntryDescriptor;
 
     /**
-     * @param index
+     * @param index the index of journal entry to edit
      */
     public EditJournalEntryCommand(Index index,
                                    EditEntryDescriptor editEntryDescriptor) {
@@ -133,7 +133,8 @@ public class EditJournalEntryCommand extends Command {
 
         return new CommandResult(
                 String.format(MESSAGE_EDIT_ENTRY_SUCCESS, editedEntry))
-                .setJournalTab();
+                .setJournalTab()
+                .setViewingJournal(editedEntry);
     }
 
     @Override

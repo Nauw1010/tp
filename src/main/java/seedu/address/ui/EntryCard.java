@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.journal.Entry;
 
+//@@author {Nauw1010}
 /**
  * An UI component that displays information of a {@code Entry} briefly.
  */
